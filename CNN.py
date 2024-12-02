@@ -66,10 +66,8 @@ metrics_list = []
 
 #begin with manual tuning
 print("manual training")
-layers = [2]
-# [2, 4, 6]
-nodes_per_layer = [32]
-# [32, 64, 128]
+layers = [2, 4, 6]
+nodes_per_layer = [32, 64, 128]
 batch_size = 64
 learning_rate = 0.001
 dropout_rate = 0.2
@@ -97,7 +95,7 @@ print("Best baseline MAE:", best_baseline_mae, "Best baseline R2:", r2)
 # %%
 # random search
 print("random search")
-def RandomSearch(best_baseline, num_trials=1): #change back to 10
+def RandomSearch(best_baseline, num_trials=10): #change back to 10
     best_random_mae = float('inf')
     best_random_config = None
 
@@ -133,8 +131,8 @@ def GridSearch(best_random_config):
 
     layers, nodes, dropout_rate, batch_size, learning_rate, epochs = best_random_config
     
-    fine_learning_rates = np.linspace(learning_rate - 0.0005, learning_rate + 0.0005, num=1) #change back to 5
-    fine_dropout_rates = np.linspace(dropout_rate - 0.05, dropout_rate + 0.05, num=1) #change back to 5
+    fine_learning_rates = np.linspace(learning_rate - 0.0005, learning_rate + 0.0005, num=5) #change back to 5
+    fine_dropout_rates = np.linspace(dropout_rate - 0.05, dropout_rate + 0.05, num=5) #change back to 5
     fine_batch_sizes = [batch_size//2, batch_size, batch_size*2]
 
     for lr in fine_learning_rates:
@@ -212,8 +210,8 @@ def crossover_and_mutate(parents, population_size):
     return new_population
 
 def EvolutionarySearch(best_grid_config):
-    population_size = 2  # Define a population size for evolution- change back to 20
-    generations = 1  # Define number of generations- change back to 10
+    population_size = 20  # Define a population size for evolution- change back to 20
+    generations = 10  # Define number of generations- change back to 10
     population = initialize_population(best_grid_config, population_size)
 
     for generation in range(0, generations):
@@ -281,7 +279,7 @@ metrics_df = pd.DataFrame(metrics_list, columns =['Hyperparameter Strategy', 'La
 
 metrics_df = metrics_df.sort_values(by='MAE', ascending=True)
 
-metrics_df.to_csv('metrics_CNN.csv', sep='\t', index=False)
+metrics_df.to_csv('metrics_CNN.txt', sep='\t', index=False)
 
 layers = best_evolution['layers']
 nodes = best_evolution['nodes']
