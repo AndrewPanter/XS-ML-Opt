@@ -13,5 +13,7 @@ pip install pandas matplotlib scikit-learn seaborn numpy scikit-optimize
 ```
 Note: the CNN file takes approximately 1 hour to run and the ResNet model about 5 hours to run. To run the files the compiled_data file must be unzipped and placed in the same folder as the Python sctips. 
 
+## Simulated Annealing
+The simulated annealing contains the Python scripts used to perform... 
 
 Please add to this README as you alter the directory structure of the repo.
