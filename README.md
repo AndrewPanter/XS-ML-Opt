@@ -14,6 +14,26 @@ pip install pandas matplotlib scikit-learn seaborn numpy scikit-optimize
 Note: the CNN file takes approximately 1 hour to run and the ResNet model about 5 hours to run. To run the files the compiled_data file must be unzipped and placed in the same folder as the Python sctips. 
 
 ## Simulated Annealing
-The simulated annealing contains the Python scripts used to perform... 
+The SimulatedAnnealing director contains the scripts used to perform the simulated annealing optimization.
 
-Please add to this README as you alter the directory structure of the repo.
+In order to run the simulated annealing, you will first need to extract the .keras files for the optimized surrogate models:
+
+```
+tar -xvf CNN-Keras.tar.gz
+tar -xvf ResNet-Keras.tar.gz
+```
+
+Next, you will need to call the runner script for the simulated annealing process.  If you wish to run the simulated annealing with the CNN surrogate model call:
+
+```
+python SimulatedAnnealing/Simulated_Annealing_Runner.py cnn
+```
+
+And if you wish to run with the ResNet model, call:
+
+```
+python SimulatedAnnealing/Simulated_Annealing_Runner.py resnet
+```
+
+The plots of the convergence of the predicted reactivity error will be saved into the Convergence_Plots directory.  And a .txt file will be generated that contains the optimized group structure from each of the simulated annealing runs.  If the .txt file already exists, the new results will simply be appended to the end of file.
+

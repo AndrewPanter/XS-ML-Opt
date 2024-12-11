@@ -79,21 +79,3 @@ def Decide_Acceptance(original_error, new_error, temperature):
         random_number = random.uniform(0, 1) 
 
         return (random_number < accept_probaility)
-
-
-def Toy_Evaluation_Function(input_group_structure):
-
-    # This function just returns the standard deviation of the vector of distances between the boundaries (i.e. the function is minimized when the boundaries are equally spaced along the fine grid)
-
-    distances = []
-    distance_counter = 0
-
-    for i in range(len(input_group_structure)):
-
-        if input_group_structure[i] == 1:
-            distances.append(distance_counter)
-            distance_counter = 0
-        else:
-            distance_counter = distance_counter + 1
-
-    return np.std(distances)

@@ -15,6 +15,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import random
 import time
+import sys
+import os
 
 # Keras:
 from keras.models import Sequential, load_model
@@ -41,11 +43,25 @@ print(device_lib.list_local_devices())
 # Initialize random number generator seed:
 random.seed(42)
 
+# Input Handling:
+if sys.argv[1] == "cnn": #If you wish to run with CNN surrogate model:
+    best_model_path = "cnn_best_model.keras"
+    coarse_figure_name = "coarse_errors_cnn"
+    fine_figure_name = "fine_errors_cnn"
+    save_file = "best_structures_cnn.txt"
+elif sys.argv[1] == "resnet":
+    best_model_path = "resnet_best_model.keras"
+    coarse_figure_name = "coarse_errors_resnet"
+    fine_figure_name = "fine_errors_resnet"
+    save_file = "best_structures_resnet.txt"
+else:
+    raise ValueError("Unrecognized Surrogate Model Type Input. Please Use Either 'cnn' or 'resnet'.")
+
+# Create the Save File if it Does Not Yet Exist:
+os.system("touch " + save_file)
+
 # Loading the best model into memory from the .keras file:
-#best_model_path = "resnet_best_model.keras"
-best_model_path = "cnn_best_model.keras"
 best_model = load_model(best_model_path)
-save_file = "best_structures_cnn.txt"
 
 # Set up simulated annealing parameters:
 num_outer_iterations = 100
@@ -59,27 +75,16 @@ num_runs = 30
 num_fine_bounds = 399
 num_coarse_bounds = 49
 
-#For debugging:
-#toy_list = [0,1,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,1]
-
 start_time = time.time()
 
 for run_number in range(num_runs):
 
     # Create Initial Group Structure:
     initial_group_structure = Create_Random_Group_Structure(num_fine_bounds,num_coarse_bounds)
-    #initial_group_structure = float(initial_group_structure)
-    print(initial_group_structure)
-    print(Toy_Evaluation_Function(initial_group_structure))
 
-    print(np.shape(initial_group_structure))
-    #print(np.shape(toy_list))
-
+    # Output Initial Predicted Error:
     initial_error = best_model.predict(np.array(initial_group_structure).reshape(-1,399,1))
-    #initial_error = best_model.predict(np.array(toy_list,dtype="float32"))
-    #initial_error = Toy_Evaluation_Function(initial_group_structure)
-
-    #print("Predicted Error of Initial Group Structure" + str(initial_error))
+    print("Predicted Error of Initial Group Structure" + str(initial_error))
 
 
     current_group_structure = initial_group_structure
@@ -117,10 +122,7 @@ for run_number in range(num_runs):
         print("Error at end of outer iteration #" + str(m) + ": " + str(current_error))
 
     with open(save_file, "a") as save_writer:
-        if run_number > 0:
-            save_writer.write("\n")
-
-        save_writer.write((str(minimum_error_group_structure)[1:-1] + ", " + str(minimum_error)).replace(" ", ""))
+        save_writer.write("\n"+(str(minimum_error_group_structure)[1:-1] + ", " + str(minimum_error)).replace(" ", ""))
     save_writer.close()
 
 
@@ -130,7 +132,7 @@ for run_number in range(num_runs):
     plt.xlabel("Outer Iteration #")
     plt.ylabel("Predicted k-eff Error")
     plt.title("Simulated Annealing k-eff Error Convergence Plot")
-    plt.savefig("Convergence_Plots/coarse_errors_" + str(run_number+1)+ ".png")
+    plt.savefig("Convergence_Plots/" + coarse_figure_name + "_" + str(run_number+1)+ ".png")
 
     #print(errors)
     plt.figure()
@@ -138,13 +140,13 @@ for run_number in range(num_runs):
     plt.xlabel("Inner Iteration #")
     plt.ylabel("Predicted k-eff Error")
     plt.title("Simulated Annealing k-eff Error Convergence Plot")
-    plt.savefig("Convergence_Plots/fine_errors_" + str(run_number+1)+ ".png")
+    plt.savefig("Convergence_Plots/" + fine_figure_name + "_" + str(run_number+1)+ ".png")
 
     #print(errors)
     plt.figure()
     plt.plot(range(len(temperatures)),temperatures)
     plt.xlabel("Inner Iteration #")
-    plt.ylabel("'Temperature' (Unitless)")
+    plt.ylabel("Temperature")
     plt.title("Simulated Annealing Cooling Schedule")
     plt.savefig("Convergence_Plots/cooling_schedule.png")
 
