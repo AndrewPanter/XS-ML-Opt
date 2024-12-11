@@ -23,13 +23,13 @@ tar -xvf CNN-Keras.tar.gz
 tar -xvf ResNet-Keras.tar.gz
 ```
 
-Next, you will need to call the runner script for the simulated annealing process.  If you wish to run the simulated annealing with the CNN surrogate model call:
+Next, you will need to call the runner script for the simulated annealing process.  If you wish to run the simulated annealing with the CNN surrogate model call: (This will perform 30 simulated annealing runs and take approximately 70 minutes)
 
 ```
 python SimulatedAnnealing/Simulated_Annealing_Runner.py cnn
 ```
 
-And if you wish to run with the ResNet model, call:
+And if you wish to run with the ResNet model, call: (This will perform 30 simulated annealing runs and take approximately 70 minutes)
 
 ```
 python SimulatedAnnealing/Simulated_Annealing_Runner.py resnet
