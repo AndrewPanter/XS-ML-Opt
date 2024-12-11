@@ -35,5 +35,7 @@ And if you wish to run with the ResNet model, call: (This will perform 30 simula
 python SimulatedAnnealing/Simulated_Annealing_Runner.py resnet
 ```
 
+If you wish to suppress the output from these scripts (and slightly accelerate them), you can add a 'nohup' before the python call.
+
 The plots of the convergence of the predicted reactivity error will be saved into the Convergence_Plots directory.  And a .txt file will be generated that contains the optimized group structure from each of the simulated annealing runs.  If the .txt file already exists, the new results will simply be appended to the end of file.
 
